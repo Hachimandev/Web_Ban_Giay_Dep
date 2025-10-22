@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FiMail,
   FiLock,
@@ -8,18 +8,58 @@ import {
   FiEyeOff,
   FiTruck,
   FiShield,
+  FiUser,
 } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import shop from "../assets/image/shop.png";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // 'e' sẽ không còn bị báo lỗi
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Đã gửi form");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:8085/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      if (!res.ok) {
+        alert("Tên đăng nhập hoặc mật khẩu không đúng!");
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("roles", JSON.stringify(data.roles || []));
+      console.log(data);
+
+      alert("Đăng nhập thành công!");
+
+      if (data.roles && data.roles.includes("ROLE_ADMIN")) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Có lỗi khi kết nối server!");
+    }
+    setLoading(false);
   };
 
   return (
@@ -79,17 +119,19 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Email
+                  Tên đăng nhập
                 </label>
                 <div className="relative">
-                  <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
-                    type="email"
-                    id="email"
-                    placeholder="Nhập email của bạn"
+                    type="text"
+                    id="username"
+                    placeholder="Nhập tên đăng nhập"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg py-3 px-12 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-orange/50"
                     required
                   />
@@ -109,6 +151,8 @@ const LoginPage = () => {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="Nhập mật khẩu"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg py-3 px-12 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-orange/50"
                     required
                   />
@@ -143,9 +187,12 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors shadow-md"
+                disabled={loading}
+                className={`w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors shadow-md ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
-                Đăng nhập
+                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
               </button>
 
               <div className="relative my-6">
