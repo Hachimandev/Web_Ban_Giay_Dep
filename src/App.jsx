@@ -1,35 +1,41 @@
-// src/App.jsx
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/layout/Header.jsx";
-import Footer from "./components/layout/Footer.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import LoginPage from "./pages/LoginPage.js";
-import AdminDashboard from "./pages/adminpages/AdminDashBoard.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+
+import CustomerLayout from "./components/layout/CustomerLayout.jsx";
+import AdminLayout from "./components/layout/AdminLayout.jsx";
+
+import HomePage from "./pages/HomePage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import DashboardPage from "./pages/admin/DashboardPage.jsx";
+import ProductsPage from "./pages/admin/ProductsPage.jsx";
+import StaffPage from "./pages/admin/StaffPage.jsx";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
 
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      <Route element={<CustomerLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute roleRequired="ADMIN">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </main>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute roleRequired="ADMIN">
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardPage />} />
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="staff" element={<StaffPage />} />
 
-      <Footer />
-    </div>
+      </Route>
+
+      {/* Có thể thêm route 404 ở đây */}
+      {/* <Route path="*" element={<NotFoundPage />} /> */}
+    </Routes>
   );
 }
 
