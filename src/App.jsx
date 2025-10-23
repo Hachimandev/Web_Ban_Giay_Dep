@@ -9,14 +9,15 @@ import LoginPage from "./pages/LoginPage.jsx";
 import DashboardPage from "./pages/admin/DashboardPage.jsx";
 import ProductsPage from "./pages/admin/ProductsPage.jsx";
 import StaffPage from "./pages/admin/StaffPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 function App() {
   return (
-
     <Routes>
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       <Route
@@ -30,7 +31,6 @@ function App() {
         <Route index element={<DashboardPage />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="staff" element={<StaffPage />} />
-
       </Route>
 
       {/* Có thể thêm route 404 ở đây */}

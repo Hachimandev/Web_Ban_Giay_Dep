@@ -2,6 +2,6 @@
 
 /* Thêm một số style cơ bản cho body */
 body {
-  font-family: 'Inter', sans-serif; /* Giả sử dùng font Inter, bạn có thể đổi */
+  font-family: "Inter", sans-serif; /* Giả sử dùng font Inter, bạn có thể đổi */
   @apply bg-white text-gray-800;
 }
