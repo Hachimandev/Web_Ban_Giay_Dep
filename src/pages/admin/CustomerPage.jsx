@@ -197,6 +197,7 @@ const CustomerPage = () => {
         infoText={`Hiển thị 1 đến 10 trong tổng số 2,847 kết quả`}
         page={page}
         totalPages={totalPages}
+        onPageChange={(p) => setPage(p)}
       />
     </div>
   );
