@@ -10,6 +10,7 @@ import DashboardPage from "./pages/admin/DashboardPage.jsx";
 import ProductsPage from "./pages/admin/ProductsPage.jsx";
 import StaffPage from "./pages/admin/StaffPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import CustomerPage from "./pages/admin/CustomerPage.jsx";
 
 function App() {
   return (
@@ -31,6 +32,8 @@ function App() {
         <Route index element={<DashboardPage />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="staff" element={<StaffPage />} />
+        <Route path="staff" element={<StaffPage />} />
+        <Route path="customers" element={<CustomerPage />} />
       </Route>
 
       {/* Có thể thêm route 404 ở đây */}
