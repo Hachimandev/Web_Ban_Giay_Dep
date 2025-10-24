@@ -9,7 +9,7 @@ import StatusBadge from "../../components/admin/widgets/StatusBadge";
 
 const CustomerPage = () => {
   const [search, setSearch] = useState("");
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const totalPages = 3;
 
   const customers = [
@@ -197,6 +197,7 @@ const CustomerPage = () => {
         infoText={`Hiển thị 1 đến 10 trong tổng số 2,847 kết quả`}
         page={page}
         totalPages={totalPages}
+        onPageChange={(p) => setPage(p)}
       />
     </div>
   );
